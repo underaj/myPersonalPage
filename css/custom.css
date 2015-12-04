@@ -1,0 +1,10 @@
+
+#weather-loc {
+  border:none;
+  border-bottom: 2px inset;
+  height: 26px;
+}
+
+#input-Task-buttons, #input-Task {
+  display: none;
+}

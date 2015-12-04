@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>My To-do List</title>
+    <title>My Personal Webpage</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
-    <script src="js/application.js"></script>
+    <script src='js/jquery-2.1.4.min.js'></script>
+    <script src='js/application.js'></script>
   </head>
+
   <body>
     <div class='container-fluid'>
       <!-- Top Bar -->
-      <div class="col-xs-3">
-        <div id='weather' class='col-xs-12'>
+      <div class='row'>
+        <div class="col-xs-3">
+          <div id='weather-show' class='col-xs-12'>
+          </div>
+          <input id='weather-loc' class='col-xs-12 ' placeholder='Location'>
+        </div> 
+      </div>
+      <!-- To do List -->
+      <div class='row'>
+        <div class='col-xs-4'>
+          <h5>Todo</h5>
+          <div id='todo-List' class='col-xs-12'>
+          </div>
+          <div id='input-Task' class='col-xs-12'>
+            <form>
+              <input id='userInTask' class='col-xs-8' placeholder='Task'>
+              <input id='userInDate' class='col-xs-4' placeholder='Due'>
+            </form>
+            <button id='confirm-button' type='button' class='btn btn-primary'>Confirm</button>
+            <button id='cancel-button' type='button' class ='btn btn-link'>Cancel</button>
+          </div>
+          <button id='addTask-button' type='button' class ='btn btn-link'>New Task <i class="glyphicon glyphicon-plus"></i></button>
         </div>
-        <input id='weather-loc' class='col-xs-12 ' placeholder='Location'>
-      </div> 
+      </div>
     </div>
   </body>
 </html>
