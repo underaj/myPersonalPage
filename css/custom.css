@@ -8,3 +8,8 @@
 #input-Task-buttons, #input-Task {
   display: none;
 }
+
+.taskDetail {
+  border: none;
+  border-bottom: 2px inset;
+}

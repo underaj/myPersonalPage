@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //To do list
   function toDoList() {
     var isAddOn = false, 
-    isEditOn = false,
+    // isEditOn = 0,
     taskCount = 0,
     inputTask = document.getElementById('input-Task'),
     userInTask = document.getElementById('userInTask'),
@@ -86,66 +86,111 @@ document.addEventListener('DOMContentLoaded', function() {
     function addTask() {
       var curTask = userInTask.value,
       curDate = userInDate.value,
-      freshTask = document.createElement('task'),
-      delButton = addElement('button','btn btn-link remove-button',
-      "<i class='glyphicon glyphicon-remove-circle'></i>", 
-      function () {
-        var parent = this.parentNode.parentNode;
-        var child = this.parentNode;
-        parent.removeChild(child);
-      });
+      freshTaskLine = document.createElement('div'),
+      confirmChangeButton,
+      cancelChangeButton,
+      delButton = addButton('button','col-xs-1','btn btn-link remove-button',"<i class='glyphicon glyphicon-remove-circle'></i>", 'mousedown',
+        function () {
+          var parent = this.parentNode.parentNode.parentNode,
+          child = this.parentNode.parentNode;
+          parent.removeChild(child);
+          taskCount--;
+        }),
+      taskDetail = addElement('input','col-xs-10','col-xs-12 taskDetail',curTask,
+        function () {
+          closeInputTask();
+          var isEditOn = parseFloat(this.getAttribute('isEditOn')) + 1;
+          this.setAttribute('isEditOn',isEditOn);
+          console.log(isEditOn);
+          console.log('focus in element');
+          if (isEditOn === 1) {
+            var originalTask = this.value;
+            this.setAttribute('originalTask',originalTask);
+            confirmChangeButton = addButton('button','col-xs-3','btn-xs btn-primary','Change','mousedown',
+              function () {
+                var inEle = this.parentNode.parentNode.firstChild.firstChild;
+                inEle.setAttribute('originalTask',inEle.value); 
+            });
 
-      function addElement (ele, myClas,innerCon,myFunc) {
-        // add as input element
-        var myEle = document.createElement(ele);
-        myEle.setAttribute('class', myClas);
+            cancelChangeButton = addButton('button','col-xs-3','btn-xs btn-link','cancel','mousedown',
+              function () {
+                this.parentNode.parentNode.firstChild.firstChild.value = originalTask; 
+            });
+
+            this.parentNode.parentNode.appendChild(confirmChangeButton);
+            this.parentNode.parentNode.appendChild(cancelChangeButton);
+            delButton.style.visibility = 'visible';
+          }
+        },
+        function () {
+          console.log('blur out');
+          this.setAttribute('isEditOn',0);
+          this.value = this.getAttribute('originalTask');
+          confirmChangeButton.parentNode.removeChild(confirmChangeButton);
+          cancelChangeButton.parentNode.removeChild(cancelChangeButton);
+          delButton.style.visibility = 'hidden';
+        });
+
+      function addButton (ele,myDivClas,myEleClas,innerCon,myEvent,myFunc) {
+        var myDiv = document.createElement('div'),
+        myEle = document.createElement(ele);
+        myDiv.setAttribute('class',myDivClas);
+        myEle.setAttribute('class', myEleClas);
         myEle.innerHTML = innerCon;
-        myEle.addEventListener('click',myFunc);
-        return myEle;
+        myEle.addEventListener(myEvent,myFunc);
+        myDiv.appendChild(myEle);
+        return myDiv;
+      }
+
+      function addElement (ele,myDivClas,myEleClas,innerCon,myFunc,myFunc2) {
+        var myDiv = document.createElement('div'),
+        myEle = document.createElement(ele);
+        myDiv.setAttribute('class',myDivClas);
+        myEle.setAttribute('class', myEleClas);
+        myEle.setAttribute('isEditOn',0);
+        myEle.value = innerCon;
+        myEle.addEventListener('mousedown',myFunc);
+        myEle.addEventListener('blur',myFunc2);
+        myDiv.appendChild(myEle);
+        return myDiv;
       }
 
       // use addElement to add the task and date
-
-      // function eleToStr (ele) {
-      //   var myDiv = document.createElement('div');
-      //   myDiv.appendChild(ele);
-      //   return myDiv.innerHTML;
-      // }
-
-      inputTask.style.display = "none";      
-      freshTask.innerHTML = "<div class='col-xs-6'>" +
-        curTask + "</div>" +
-        "<div class='col-xs-4'>" +
-        curDate + "</div>";
-      freshTask.appendChild(delButton);
-      document.getElementById('todo-List').appendChild(freshTask);
+      delButton.style.visibility = 'hidden';
+      freshTaskLine.setAttribute('class', 'row');
+      freshTaskLine.appendChild(taskDetail);
+      freshTaskLine.appendChild(delButton);
+      document.getElementById('todo-List').appendChild(freshTaskLine);
       userInTask.value = '';
       userInDate.value = '';
     }
 
-    document.getElementById('addTask-button').onclick = function () {
-      if (!isAddOn) {
-        return function() {
+    function closeInputTask () {
+      inputTask.style.display = "none";
+      userInTask.value = '';
+      userInDate.value = '';
+      isAddOn = false;
+    }
+
+    document.getElementById('addTask-button').addEventListener('click', function () {
+      if (!isAddOn && taskCount < 6) {
           inputTask.style.display = "block";      
           userInTask.focus();
           isAddOn = true;
-        }();
       }
-    };
+    });
 
     document.getElementById('confirm-button').onclick = function () {
       if (isAddOn && userInTask.value) {
         addTask();
-        isAddOn = false;
+        taskCount++;
+        closeInputTask();
       }
     };
 
     document.getElementById('cancel-button').onclick = function () {
-      if (isAddOn) {
-        inputTask.style.display = "none";      
-        userInTask.value = '';
-        userInDate.value = '';
-        isAddOn = false;
+      if (isAddOn) {     
+        closeInputTask();
       }
     };
   }
