@@ -1,6 +1,16 @@
-
 document.addEventListener('DOMContentLoaded', function() {
-
+  function setBackground () {
+    var curTime = new Date(),
+    hour = curTime.getHours();
+    if (hour <= 7 || hour >= 18) {
+      document.body.style.backgroundImage = "url('photos/night.jpg')";
+    } else if (hour <= 12) {
+      document.body.style.backgroundImage = "url('photos/morning.jpg')";
+    } else {
+      document.body.style.backgroundImage = "url('photos/afternoon.jpg')";
+    }
+  }
+  setBackground();
   // AJAX GET weather data
   function getWeather() {
     var weatherShow = document.getElementById('weather-show'),
@@ -78,9 +88,14 @@ document.addEventListener('DOMContentLoaded', function() {
       // if enter is pressed
       if (keyCode == '13') {
         weatherLoc.blur();
-        myUrl = getUrl(getLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
+        myUrl = getUrl(getInputLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
         return getRequest(dispWeather);
       }
+    }
+
+    weatherLoc.onblur = function() {
+      myUrl = getUrl(getInputLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
+      return getRequest(dispWeather);
     }
 
     getCurrentLocation();
@@ -98,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addTask() {
       var curTask = userInTask.value,
-      curDate = userInDate.value,
+      // curDate = userInDate.value,
       freshTaskLine = document.createElement('div'),
       delButton = addButton('button','col-xs-1','btn btn-link remove-button',"<i class='glyphicon glyphicon-remove-circle'></i>",'mousedown',function () {
         var parent = this.parentNode.parentNode.parentNode,
@@ -165,13 +180,13 @@ document.addEventListener('DOMContentLoaded', function() {
       freshTaskLine.appendChild(delButton);
       document.getElementById('todo-List').appendChild(freshTaskLine);
       userInTask.value = '';
-      userInDate.value = '';
+      // userInDate.value = '';
     }
 
     function closeInputTask() {
       inputTask.style.display = "none";
       userInTask.value = '';
-      userInDate.value = '';
+      // userInDate.value = '';
       isAddOn = false;
     }
 
@@ -182,6 +197,19 @@ document.addEventListener('DOMContentLoaded', function() {
           isAddOn = true;
       }
     });
+
+    userInTask.onkeydown = function(e) {
+      if (!e) e = window.event;
+      var keyCode = e.keyCode || e.which;
+      // if enter is pressed
+      if (keyCode == '13') {
+        if (isAddOn && userInTask.value) {
+          addTask();
+          taskCount++;
+          closeInputTask();
+        }
+      }
+    }
 
     document.getElementById('confirm-button').onclick = function() {
       if (isAddOn && userInTask.value) {
@@ -200,10 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   toDoList();
 
-});
-// News api
-
-// the guardian news 693f9530-f7ee-4eb7-9565-e5a0580c6c2a
+  // News api the guardian news 693f9530-f7ee-4eb7-9565-e5a0580c6c2a
 
 // document.onclick = function() {
 //   var highlightedWord = window.getSelection().toString();
@@ -215,55 +240,47 @@ document.addEventListener('DOMContentLoaded', function() {
 //   }
 // }
 
-// function defineWord(word) {
-//     function getRequest(dataHandle) {
-//       var XHR, 
-//       myUrl = getUrl(getLocation())('http://api.openweathermap.org/data/2.5/weather?q=','&appid=2de143494c0b295cca9337e1e96b00e0');
-//       function makeRequest(url) {
-//         XHR = new XMLHttpRequest();
-//         if (!XHR) {
-//           console.log('can\'t get data');
-//           return false;
-//         }
-//         XHR.onreadystatechange = function() {
-//           if (XHR.readyState === XMLHttpRequest.DONE && XHR.status === 200) {
-//             return dataHandle(JSON.parse(XHR.responseText));
-//           } else {
-//             console.log('Waiting for data');
-//           }
-//         };
-//           ;
-//         XHR.open('GET',url,true);
-//         XHR.send();
-//       }
-//       return makeRequest(myUrl);
-//     }
+  function getNewsFeed() {
+    function getRequest(dataHandle) {
+      var XHR, 
+      myUrl = 'http://api.nytimes.com/svc/topstories/v1/world.json?api-key=b5f1430d9b082e1b2489f5c4036adedd:16:73712885';
+      function makeRequest(url) {
+        XHR = new XMLHttpRequest();
+        if (!XHR) {
+          console.log('can\'t get data');
+          return false;
+        }
+        XHR.onreadystatechange = function() {
+          if (XHR.readyState === XMLHttpRequest.DONE && XHR.status === 200) {
+            return dataHandle(JSON.parse(XHR.responseText));
+          } else {
+            console.log('Waiting for data');
+          }
+        };
+          ;
+        XHR.open('GET',url,true);
+        XHR.send();
+      }
+      return makeRequest(myUrl);
+    }
 
-//     function getUrl(userInput) {
-//       var myStr = '';
-//       myStr += userInput;
-//       return function (before,after) {
-//         myStr = before + myStr;
-//         if(after) {
-//           myStr = myStr +after;
-//         };
-//         return myStr;
-//       }
-//     }
+    // function getUrl(userInput) {
+    //   var myStr = '';
+    //   myStr += userInput;
+    //   return function (before,after) {
+    //     myStr = before + myStr;
+    //     if(after) {
+    //       myStr = myStr +after;
+    //     };
+    //     return myStr;
+    //   }
+    // }
 
-//     // weatherLoc.onkeyup = function(e) {
-//     //   if (!e) e = window.event;
-//     //   var keyCode = e.keyCode || e.which;
-//     //   // if enter is pressed
-//     //   if (keyCode == '13') {
-//     //     weatherLoc.blur();
-//     //     return getRequest(dispWeather);
-//     //   }
-//     // }
+    getRequest(function(data) {
+      console.log(data.results[0]);
+    });
+  }
 
-//     getRequest(function(data) {
-//       console.log(data.main.temp);
-//       weatherShow.innerHTML = Math.round(data.main.temp - 273.15);
-//       weatherLoc.value = data.name;
-//     });
-//   }
+  getNewsFeed();
+
+});
