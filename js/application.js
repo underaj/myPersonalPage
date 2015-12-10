@@ -94,8 +94,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     weatherLoc.onblur = function() {
+      this.setAttribute('class','off-Focus col-xs-12');
       myUrl = getUrl(getInputLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
       return getRequest(dispWeather);
+    }
+
+    weatherLoc.onfocus = function() {
+      this.setAttribute('class','col-xs-12');
     }
 
     getCurrentLocation();
@@ -115,13 +120,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var curTask = userInTask.value,
       // curDate = userInDate.value,
       freshTaskLine = document.createElement('div'),
-      delButton = addButton('button','col-xs-1','btn btn-link remove-button',"<i class='glyphicon glyphicon-remove-circle'></i>",'mousedown',function () {
+      delButton = addButton('button','col-xs-1','btn-s btn-link remove-button',"<i class='glyphicon glyphicon-remove-circle'></i>",'mousedown',function () {
         var parent = this.parentNode.parentNode.parentNode,
         child = this.parentNode.parentNode;
+        this.parentNode.parentNode.firstChild.firstChild.setAttribute('class','removed-taskDetail');
         parent.removeChild(child);
         taskCount--;
       }),
-      taskDetail = addElement('input','col-xs-10','col-xs-12 taskDetail',curTask,function() {
+      taskDetail = addElement('input','col-xs-10','col-xs-12 new-taskDetail',curTask,function() {
         var isEditOn = this.getAttribute('isEditOn');
         closeInputTask();
         if (isEditOn === 'false') {
@@ -173,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return myDiv;
       }
 
-      // use addElement to add the task and date
       delButton.style.visibility = 'hidden';
       freshTaskLine.setAttribute('class', 'row');
       freshTaskLine.appendChild(taskDetail);
@@ -230,15 +235,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // News api the guardian news 693f9530-f7ee-4eb7-9565-e5a0580c6c2a
 
-// document.onclick = function() {
-//   var highlightedWord = window.getSelection().toString();
-//   if(highlightedWord == "") {
-//     console.log('wtf');
-//   } else {
-//     console.log(highlightedWord);
-//     defineWord(highlightedWord);
-//   }
-// }
+  // document.onclick = function() {
+  //   var highlightedWord = window.getSelection().toString();
+  //   if(highlightedWord == "") {
+  //     console.log('wtf');
+  //   } else {
+  //     console.log(highlightedWord);
+  //     defineWord(highlightedWord);
+  //   }
+  // }
 
   function getNewsFeed() {
     function getRequest(dataHandle) {
@@ -277,10 +282,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // }
 
     getRequest(function(data) {
-      console.log(data.results[0]);
+      var news = data.results[0];
+      console.log(news);
+      imgUrl = news.multimedia[2].url;
+      console.log(imgUrl);
+      document.getElementById('news1').style.backgroundImage = "url("+imgUrl+")";
     });
   }
-
+  
   getNewsFeed();
-
 });
