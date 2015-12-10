@@ -10,6 +10,10 @@ body {
   color: white;
 }
 
+a {
+  color:white;
+}
+
 input{
   background: none;
   outline: none;
@@ -24,10 +28,14 @@ input{
   border-bottom: 2px inset;
   height: 26px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .off-Focus {
   background: white;
+  -webkit-animation: outFocus .5s linear forwards;
+  -moz-animation: outFocus .5s linear forwards;
+  -0-animation: outFocus .5s linear forwards;
   animation: outFocus .5s linear forwards;
 }
 
@@ -38,7 +46,7 @@ input{
 }
 
 /*Todo List*/
-#input-Task-buttons, #input-Task {
+#input-Task {
   display: none;
 }
 
@@ -50,10 +58,17 @@ input{
   border-radius: 2px;
 }
 
+#userInTask {
+  border: none;
+}
+
 .new-taskDetail {
   border: none;
   border-bottom: 2px inset;
   opacity: 0;
+  -webkit-animation: fadeIn .5s linear forwards;
+  -moz-animation: fadeIn .5s linear forwards;
+  -0-animation: fadeIn .5s linear forwards;
   animation: fadeIn .5s linear forwards;
 }
  
@@ -74,11 +89,36 @@ input{
   }
 }*/
 
-
 /*News Content*/
-#news1 {
-  height: 200px;
-  background-size: cover;
-  position: relative;
-  margin: 40px 0 0 0;
+
+#newswrap {
+  background-color: #fff;
+  background-color: rgba(255,255,255,0.6);
+  border-radius: 2px;
 }
+
+.imgWrap {
+  position: relative;
+}
+
+span.img-caption {
+  background: rgba(0,0,0,0.8);
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: 50px;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  width: auto;
+  opacity: 0;
+  -webkit-transition: opacity .5s;
+  -moz-transition: opacity .5s;
+  -o-transition: opacity .5s;
+  transition: opacity .5s;
+}
+
+.imgWrap:hover span.img-caption {
+  opacity: 1;
+}
+

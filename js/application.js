@@ -283,10 +283,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     getRequest(function(data) {
       var news = data.results[0];
-      console.log(news);
-      imgUrl = news.multimedia[2].url;
-      console.log(imgUrl);
-      document.getElementById('news1').style.backgroundImage = "url("+imgUrl+")";
+      myDiv = document.getElementById('news1'),
+      imgWrap = document.createElement('div');
+      myImg = document.createElement('img');
+      imgWrap.setAttribute('class','imgWrap')
+      myImg.setAttribute('class','img-responsive');
+      myImg.setAttribute('src',news.multimedia[4].url);  
+      imgWrap.appendChild(myImg);
+      imgWrap.innerHTML += "<span class='img-caption'>" + news.multimedia[4].caption + "</span>";
+      myDiv.appendChild(imgWrap);
+      myDiv.innerHTML += '<h3><a href='+news.url+'>'+news.title+'</a></h3>' +
+        '<p>'+news.abstract+'</p>';
     });
   }
   
