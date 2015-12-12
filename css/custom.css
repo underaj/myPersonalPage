@@ -7,11 +7,22 @@ body {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
+  font-family: Helvetica;
   color: white;
+  text-shadow: 0 1px 5px rgba(0,0,0,.1);
 }
 
 a {
   color:white;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #D2CBC9;
+}
+
+p {
+  color: #D2CBC9;
 }
 
 input{
@@ -19,16 +30,28 @@ input{
   outline: none;
   border: none;
   box-shadow:none !important;
-  border-bottom: 2px inset;
+  border-bottom: 1px inset;
 }
 
-/*Weather Bar*/
+/*Weather*/
+#weather-locwrap {
+  position: absolute;
+  top: 4px;
+  left: 0px;
+}
+
 #weather-loc {
   border: none;
-  border-bottom: 2px inset;
   height: 26px;
   text-align: center;
+  color: #D2CBC9;
+  font-size: 12px;
+  font-weight: bold;
   text-transform: uppercase;
+}
+
+#weather-loc:focus {
+  text-decoration: underline;
 }
 
 .off-Focus {
@@ -45,17 +68,39 @@ input{
   }
 }
 
-/*Todo List*/
-#input-Task {
-  display: none;
+#mainwrap-top {
+  width:200px;
+  height:200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin:-200px 0 0 -100px; 
 }
 
+#weather-show {
+  width:50px;
+  height:50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin:55px 0 0 90px; 
+}
+
+/*Todo List*/
 #todowrap {
   background-color: #fff;
-  background-color: rgba(255,255,255,0.6);
-  height: 300px;
-  width:250px;
-  border-radius: 2px;
+  background-color: rgba(0,0,0,0.6);
+  height: 50vh;
+  position: fixed;
+  bottom: 60px;
+  left: 20px;
+  display: none;
+  border-radius: 6px;
+  opacity: 0;
+}
+
+#input-Task {
+  display: none;
 }
 
 #userInTask {
@@ -71,30 +116,40 @@ input{
   -0-animation: fadeIn .5s linear forwards;
   animation: fadeIn .5s linear forwards;
 }
- 
+
 @keyframes fadeIn {
   to {
     opacity: 1;
   }
 }
 
-/*.removed-taskDetail {
-  opacity: 1;
-  animation: fadeOut .2s linear forwards;
+#todo-button {
+  position: fixed;
+  cursor:pointer;
+  bottom: 20px;
+  left: 20px;
+  font-size: 20px;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
+}
+
+#todo-button:hover {
+  text-decoration: none;
+  color: #D2CBC9;
 }
  
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-  }
-}*/
-
-/*News Content*/
-
+/*News Feed*/
 #newswrap {
   background-color: #fff;
-  background-color: rgba(255,255,255,0.6);
-  border-radius: 2px;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 6px;
+  height: 86vh;
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  overflow-y: scroll;
+  display: none;
+  opacity: 0;
 }
 
 .imgWrap {
@@ -104,13 +159,13 @@ input{
 span.img-caption {
   background: rgba(0,0,0,0.8);
   color: white;
-  cursor: pointer;
   display: table;
   height: 50px;
   left: 0;
   bottom: 0;
   position: absolute;
   width: auto;
+  padding: 5px;
   opacity: 0;
   -webkit-transition: opacity .5s;
   -moz-transition: opacity .5s;
@@ -120,5 +175,63 @@ span.img-caption {
 
 .imgWrap:hover span.img-caption {
   opacity: 1;
+}
+
+#news-button {
+  position: fixed;
+  cursor:pointer;
+  bottom: 20px;
+  right: 20px;
+  font-size: 20px;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+#news-button:hover {
+  text-decoration: none;
+  color: #D2CBC9;
+}
+
+#news-button:active {
+  border: none;
+} 
+
+h4 {
+ margin-top: 4px;
+ margin-bottom: 2px;
+}
+
+.news-title-abstract {
+  margin-bottom: 10px;
+}
+
+/*greetings*/
+#mainwrap-bot {
+  width:600px;
+  height:400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin:-20px 0 0 -300px; 
+}
+
+h1 {
+  text-align: center;
+  font-size: 64px;
+}
+
+/*Animations*/
+
+.show-block {
+  -webkit-animation: fadeIn .5s linear forwards;
+  -moz-animation: fadeIn .5s linear forwards;
+  -0-animation: fadeIn .5s linear forwards;
+  animation: fadeIn .5s linear forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }
 

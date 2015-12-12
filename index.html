@@ -15,48 +15,50 @@
     <div class='container-fluid'>
       <!-- Top Bar -->
       <div class='row'>
-        <div class="col-xs-3">
-          <div id='weather-show' class='col-xs-12'>
-            <i class='glyphicon glyphicon-time'></i> 
-          </div>
-          <input id='weather-loc' class='col-xs-12' placeholder='Location'>
+        <div id='weather-locwrap'>
+          <input id='weather-loc' onkeypress="this.style.width = (this.value.length + 1)">
         </div> 
       </div>
+      <!-- Main message center -->
+      <div class='row'>
+        <div id='mainwrap-top'> 
+          <div id='weather-show' class='col-xs-12'>
+          </div>
+          <img id='weather-icon' src='' class='img-responsive'>
+        </div> 
+        <div id='mainwrap-bot'> 
+          <h1 id='greeting'></h1>
+        </div>
+      </div>
+      <!-- Todo and News -->
       <div class='row'>
         <!-- To do List -->
         <div id='todowrap' class='col-xs-3'>
-          <h5>Todo</h5>
           <div id='todo-List' class='col-xs-12'>
           </div>
           <div id='input-Task' class='col-xs-12'>
             <input id='userInTask' class='col-xs-10' placeholder='Task'>
             <!-- <input id='userInDate' class='col-xs-4' placeholder='Due'> -->
-            <button id='confirm-button' type='button' class='btn-xs btn-primary'>Confirm</button>
-            <button id='cancel-button' type='button' class ='btn-xs btn-link'>Cancel</button>
+            <div class='col-xs-6'>
+              <button id='confirm-button' type='button' class='btn-xs btn-primary'>Confirm</button>
+              <button id='cancel-button' type='button' class ='btn-xs btn-link'>Cancel</button>
+            </div>
           </div>
-          <button id='addTask-button' type='button' class ='btn btn-link'>New Task <i class="glyphicon glyphicon-plus"></i></button>
+          <button id='addtask-button' type='button' class ='btn btn-link'>New Task <i class="glyphicon glyphicon-plus"></i></button>
         </div>
         <!-- News Feed -->
-        <div id='newswrap' class="col-xs-6">
-          <div class="col-xs-12 content-background">
-            <div id='news1' class="col-xs-12 col-sm-8">
-            </div
-            <div id='news2' class="col-xs-12 col-sm-4">
-              <img id='news2' class="img-responsive">
-              <p class="img-cap"><em>20 Nov'14</em> 
-              -
-              <em>By</em><strong> JORY MACKAY</strong></p>
-              <h3>The weird science of first impressions</h3>
-              <img id='news2' class="img-responsive">
-              <p class="img-cap"><em>20 Nov'14</em> 
-              -
-              <em>By</em><strong> PAUL SAWERS</strong></p>
-              <h3>Adidas now lets Americans print phtos on their sneakers too</h3>
-            </div>    
+        <div id='newswrap' class='col-xs-4'>
+          <div class='col-xs-12'>
+            <h3>Top Stories</h3>
+          </div>
+          <div id='news-content'class="content-background">
           </div>      
         </div>  
       </div>
     </div>
+    <!-- Buttons at bottom of page -->  
+    <button id='todo-button' type='button' class='btn-xs btn-link'>Task</button>
+    <button id='news-button' type='button' class='btn-xs btn-link'>News</button>
   </body>
 </html>
     

@@ -1,16 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
-  function setBackground () {
-    var curTime = new Date(),
-    hour = curTime.getHours();
+
+  var curTime = new Date(),
+  hour = curTime.getHours();
+
+  function checkTime() {
+    greeting = document.getElementById('greeting');
     if (hour <= 7 || hour >= 18) {
       document.body.style.backgroundImage = "url('photos/night.jpg')";
+      greeting.innerHTML = 'Good Evening.';
     } else if (hour <= 12) {
       document.body.style.backgroundImage = "url('photos/morning.jpg')";
+      greeting.innerHTML = 'Good Morning.';
     } else {
       document.body.style.backgroundImage = "url('photos/afternoon.jpg')";
+      greeting.innerHTML = 'Good Afternoon.';
     }
   }
-  setBackground();
+
+  checkTime();
+
   // AJAX GET weather data
   function getWeather() {
     var weatherShow = document.getElementById('weather-show'),
@@ -20,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getRequest(dataHandle) {
       var XHR;
-      console.log(myUrl);
+
       function makeRequest(url) {
         XHR = new XMLHttpRequest();
         if (!XHR) {
@@ -54,9 +62,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function dispWeather(data) {
-      console.log(data.main.temp);
-      weatherShow.innerHTML = Math.round(data.main.temp - 273.15);
+      console.log(data);
+      var weather = data.weather[0].main;
+      var icon = data.weather[0].icon;
+      console.log(icon);
+      document.getElementById('weather-icon').src = 'photos/weather/' + icon +'.png';
+      weatherShow.innerHTML = '<h5>' + Math.round(data.main.temp - 273.15).toString() + '°C ' + weather + '</h5>';
       weatherLoc.value = data.name;
+
+      // function (weat) {
+      //   var 
+      // }
     }
 
     function getInputLocation() {
@@ -94,13 +110,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     weatherLoc.onblur = function() {
-      this.setAttribute('class','off-Focus col-xs-12');
+      this.setAttribute('class','off-Focus');
       myUrl = getUrl(getInputLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
       return getRequest(dispWeather);
     }
 
     weatherLoc.onfocus = function() {
-      this.setAttribute('class','col-xs-12');
+      this.setAttribute('class','on-Focus');
     }
 
     getCurrentLocation();
@@ -112,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function toDoList() {
     var isAddOn = false, 
     taskCount = 0,
+    showTodo = false,
     inputTask = document.getElementById('input-Task'),
     userInTask = document.getElementById('userInTask'),
     userInDate = document.getElementById('userInDate');
@@ -195,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
       isAddOn = false;
     }
 
-    document.getElementById('addTask-button').addEventListener('click', function () {
+    document.getElementById('addtask-button').addEventListener('click', function () {
       if (!isAddOn && taskCount < 6) {
           inputTask.style.display = "block";      
           userInTask.focus();
@@ -229,23 +246,29 @@ document.addEventListener('DOMContentLoaded', function() {
         closeInputTask();
       }
     };
+
+    document.getElementById('todo-button').addEventListener('click', function() {
+      var todoBlock = document.getElementById('todowrap');
+      if(!showTodo) {
+        todoBlock.style.display = 'block';
+        todoBlock.setAttribute('class','show-block col-xs-3');
+        showTodo = true;
+      } else if (showTodo) {
+        todoBlock.style.display = 'none';
+        showTodo = false;
+      }
+      this.blur();
+    });
   }
 
   toDoList();
 
-  // News api the guardian news 693f9530-f7ee-4eb7-9565-e5a0580c6c2a
-
-  // document.onclick = function() {
-  //   var highlightedWord = window.getSelection().toString();
-  //   if(highlightedWord == "") {
-  //     console.log('wtf');
-  //   } else {
-  //     console.log(highlightedWord);
-  //     defineWord(highlightedWord);
-  //   }
-  // }
+  // News api
 
   function getNewsFeed() {
+    var newsBlock = document.getElementById('newswrap');
+    showNews = false;
+    
     function getRequest(dataHandle) {
       var XHR, 
       myUrl = 'http://api.nytimes.com/svc/topstories/v1/world.json?api-key=b5f1430d9b082e1b2489f5c4036adedd:16:73712885';
@@ -269,33 +292,45 @@ document.addEventListener('DOMContentLoaded', function() {
       return makeRequest(myUrl);
     }
 
-    // function getUrl(userInput) {
-    //   var myStr = '';
-    //   myStr += userInput;
-    //   return function (before,after) {
-    //     myStr = before + myStr;
-    //     if(after) {
-    //       myStr = myStr +after;
-    //     };
-    //     return myStr;
-    //   }
-    // }
-
     getRequest(function(data) {
-      var news = data.results[0];
-      myDiv = document.getElementById('news1'),
-      imgWrap = document.createElement('div');
-      myImg = document.createElement('img');
-      imgWrap.setAttribute('class','imgWrap')
-      myImg.setAttribute('class','img-responsive');
-      myImg.setAttribute('src',news.multimedia[4].url);  
-      imgWrap.appendChild(myImg);
-      imgWrap.innerHTML += "<span class='img-caption'>" + news.multimedia[4].caption + "</span>";
-      myDiv.appendChild(imgWrap);
-      myDiv.innerHTML += '<h3><a href='+news.url+'>'+news.title+'</a></h3>' +
-        '<p>'+news.abstract+'</p>';
+
+      function addToFeed(num) {
+        var news = data.results[num],
+        myDiv = document.createElement('div');
+        myDiv.setAttribute('class','col-xs-12 news-title-abstract');
+        if (news['multimedia'] != "") {
+          var imgWrap = document.createElement('div'),
+          myImg = document.createElement('img');
+          imgWrap.setAttribute('class','imgWrap');
+          myImg.setAttribute('class','img-responsive');
+          myImg.src = news.multimedia[4].url;  
+          imgWrap.appendChild(myImg);
+          imgWrap.innerHTML += "<span class='img-caption'>" + news.multimedia[4].caption + "</span>";
+          myDiv.appendChild(imgWrap);
+        }
+        myDiv.innerHTML += '<h4><a href='+news.url+'>'+news.title+'</a></h4>' +
+          '<p>'+news.abstract+'</p>';
+        document.getElementById('news-content').appendChild(myDiv);
+      }
+
+      for(var i = 0;i < 10;i++) {
+        addToFeed(i);
+      }
+    });
+
+    document.getElementById('news-button').addEventListener('click', function() {
+      if(!showNews) {
+        newsBlock.style.display = 'block';
+        newsBlock.setAttribute('class','show-block col-xs-4');
+        showNews = true;
+      } else if (showNews) {
+        newsBlock.style.display = 'none';
+        showNews = false;
+      }
+      this.blur();
     });
   }
   
   getNewsFeed();
+
 });
