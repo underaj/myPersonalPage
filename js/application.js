@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  var curTime = new Date(),
-  hour = curTime.getHours();
-
   function checkTime() {
+    var curTime = new Date(),
+    hour = curTime.getHours(),
     greeting = document.getElementById('greeting');
     if (hour <= 7 || hour >= 18) {
       document.body.style.backgroundImage = "url('photos/night.jpg')";
       greeting.innerHTML = 'Good Evening.';
-    } else if (hour <= 12) {
+    } else if (hour < 12) {
       document.body.style.backgroundImage = "url('photos/morning.jpg')";
       greeting.innerHTML = 'Good Morning.';
     } else {
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // AJAX GET weather data
   function getWeather() {
     var weatherShow = document.getElementById('weather-show'),
-    weatherLoc = document.getElementById('weather-loc'),
+    weatherLocation = document.getElementById('weather-loc'),
     myApi = '&appid=2de143494c0b295cca9337e1e96b00e0',
     myUrl;
 
@@ -65,21 +64,16 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log(data);
       var weather = data.weather[0].main;
       var icon = data.weather[0].icon;
-      console.log(icon);
       document.getElementById('weather-icon').src = 'photos/weather/' + icon +'.png';
       weatherShow.innerHTML = '<h5>' + Math.round(data.main.temp - 273.15).toString() + '°C ' + weather + '</h5>';
-      weatherLoc.value = data.name;
-
-      // function (weat) {
-      //   var 
-      // }
+      weatherLocation.value = data.name;
     }
 
     function getInputLocation() {
-      if(weatherLoc.value === '') {
-        weatherLoc.value = 'San Francisco';
+      if(weatherLocation.value === '') {
+        weatherLocation.value = 'San Francisco';
       }
-      return weatherLoc.value;
+      return weatherLocation.value;
     }
 
     function getCurrentLocation () {
@@ -98,24 +92,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    weatherLoc.onkeyup = function(e) {
+    weatherLocation.onkeyup = function(e) {
       if (!e) e = window.event;
       var keyCode = e.keyCode || e.which;
       // if enter is pressed
       if (keyCode == '13') {
-        weatherLoc.blur();
+        weatherLocation.blur();
         myUrl = getUrl(getInputLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
         return getRequest(dispWeather);
       }
     }
 
-    weatherLoc.onblur = function() {
+    weatherLocation.onblur = function() {
       this.setAttribute('class','off-Focus');
       myUrl = getUrl(getInputLocation())('http://api.openweathermap.org/data/2.5/weather?q=',myApi);
       return getRequest(dispWeather);
     }
 
-    weatherLoc.onfocus = function() {
+    weatherLocation.onclick = function() {
+      this.value = '';
       this.setAttribute('class','on-Focus');
     }
 
@@ -126,42 +121,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
   //To do list
   function toDoList() {
-    var isAddOn = false, 
-    taskCount = 0,
+    var isAddOn = false,
     showTodo = false,
+    taskCount = 0,
+    completedCount = 0,
     inputTask = document.getElementById('input-Task'),
     userInTask = document.getElementById('userInTask'),
-    userInDate = document.getElementById('userInDate');
+    userInDate = document.getElementById('userInDate'),
+    taskNotification = document.getElementById('task-notification');
 
     function addTask() {
-      var curTask = userInTask.value,
-      // curDate = userInDate.value,
+      var confirmChangeButton, cancelChangeButton,
+      curTask = userInTask.value,
       freshTaskLine = document.createElement('div'),
-      delButton = addButton('button','col-xs-1','btn-s btn-link remove-button',"<i class='glyphicon glyphicon-remove-circle'></i>",'mousedown',function () {
-        var parent = this.parentNode.parentNode.parentNode,
-        child = this.parentNode.parentNode;
-        this.parentNode.parentNode.firstChild.firstChild.setAttribute('class','removed-taskDetail');
+      completeButton = addButton('button','btn-md btn-link complete-button',"<i class='glyphicon glyphicon-ok-circle'></i>",'click',function () {
+        var parent = this.parentNode.parentNode,
+        child = this.parentNode,
+        info = this.parentNode.firstChild.firstChild;
+        info.setAttribute('class','completed-taskDetail');
+        console.log(info.value);
         parent.removeChild(child);
         taskCount--;
-      }),
+        completedCount++;
+      }), 
+      delButton = addButton('button','btn-md btn-link remove-button',
+      "<i class='glyphicon glyphicon-remove-circle'></i>",'mousedown',function () {
+        var parent = this.parentNode.parentNode,
+        child = this.parentNode;
+        this.parentNode.firstChild.firstChild.setAttribute('class','removed-taskDetail');
+        parent.removeChild(child);
+        taskCount--;
+        dispTaskNoti();
+      }), 
       taskDetail = addElement('input','col-xs-10','col-xs-12 new-taskDetail',curTask,function() {
         var isEditOn = this.getAttribute('isEditOn');
+        var confirmCancelDiv = document.createElement('div');
         closeInputTask();
         if (isEditOn === 'false') {
           var originalTask = this.value;
           this.setAttribute('originalTask',originalTask);
           this.setAttribute('isEditOn',true);
-          confirmChangeButton = addButton('button','col-xs-3','btn-xs btn-primary','Change','mousedown',
+          confirmChangeButton = addButton('button','confirm-change-button btn-xs btn-primary','Change','mousedown',
             function () {
               var inEle = this.parentNode.parentNode.firstChild.firstChild;
               inEle.setAttribute('originalTask',inEle.value); 
           });
-          cancelChangeButton = addButton('button','col-xs-3','btn-xs btn-link','cancel','mousedown',
+          cancelChangeButton = addButton('button','cancel-change-button btn-xs btn-link','cancel','mousedown',
             function() {
               this.parentNode.parentNode.firstChild.firstChild.value = originalTask; 
           });
-          this.parentNode.parentNode.appendChild(confirmChangeButton);
-          this.parentNode.parentNode.appendChild(cancelChangeButton);
+          this.parentNode.parentNode.appendChild(confirmCancelDiv);
+          this.parentNode.parentNode.lastChild.appendChild(confirmChangeButton);
+          this.parentNode.parentNode.lastChild.appendChild(cancelChangeButton);
           delButton.style.visibility = 'visible';
         }
       },function() {
@@ -170,17 +181,14 @@ document.addEventListener('DOMContentLoaded', function() {
           confirmChangeButton.parentNode.removeChild(confirmChangeButton);
           cancelChangeButton.parentNode.removeChild(cancelChangeButton);
           delButton.style.visibility = 'hidden';
-      }), confirmChangeButton, cancelChangeButton;
+      });
 
-      function addButton(ele,myDivClas,myEleClas,innerCon,myEvent,myFunc) {
-        var myDiv = document.createElement('div'),
-        myEle = document.createElement(ele);
-        myDiv.setAttribute('class',myDivClas);
+      function addButton(ele,myEleClas,innerCon,myEvent,myFunc,myType) { 
+        var myEle = document.createElement(ele);
         myEle.setAttribute('class', myEleClas);
         myEle.innerHTML = innerCon;
         myEle.addEventListener(myEvent,myFunc);
-        myDiv.appendChild(myEle);
-        return myDiv;
+        return myEle;
       }
 
       function addElement(ele,myDivClas,myEleClas,innerCon,myFunc,myFunc2) {
@@ -199,21 +207,30 @@ document.addEventListener('DOMContentLoaded', function() {
       delButton.style.visibility = 'hidden';
       freshTaskLine.setAttribute('class', 'row');
       freshTaskLine.appendChild(taskDetail);
+      freshTaskLine.appendChild(completeButton);
       freshTaskLine.appendChild(delButton);
       document.getElementById('todo-List').appendChild(freshTaskLine);
       userInTask.value = '';
-      // userInDate.value = '';
     }
 
     function closeInputTask() {
       inputTask.style.display = "none";
       userInTask.value = '';
-      // userInDate.value = '';
       isAddOn = false;
     }
 
+    function dispTaskNoti() {
+      if (taskCount === 0) {
+        taskNotification.innerHTML = 'Lets get something done today!';
+      } else if (taskCount === 1) {
+        taskNotification.innerHTML = 'You currently have ' + taskCount + ' task remaining.';
+      } else {
+        taskNotification.innerHTML = 'You currently have ' + taskCount + ' tasks remaining.';
+      }
+    }
+
     document.getElementById('addtask-button').addEventListener('click', function () {
-      if (!isAddOn && taskCount < 6) {
+      if (!isAddOn && taskCount < 10) {
           inputTask.style.display = "block";      
           userInTask.focus();
           isAddOn = true;
@@ -229,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
           addTask();
           taskCount++;
           closeInputTask();
+          dispTaskNoti();
         }
       }
     }
@@ -238,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addTask();
         taskCount++;
         closeInputTask();
+        dispTaskNoti();
       }
     };
 

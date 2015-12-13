@@ -7,7 +7,8 @@ body {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  font-family: Helvetica;
+  font-family: helvetica,Roboto;
+  font-weight: 500;
   color: white;
   text-shadow: 0 1px 5px rgba(0,0,0,.1);
 }
@@ -30,28 +31,32 @@ input{
   outline: none;
   border: none;
   box-shadow:none !important;
-  border-bottom: 1px inset;
+}
+
+input:focus {
+  text-decoration: underline;
 }
 
 /*Weather*/
-#weather-locwrap {
+#weather-wrap {
   position: absolute;
-  top: 4px;
-  left: 0px;
+  padding: 0;
+  top: 6px;
+  left: 14px;
+  height: 46px;
+  background-color: rgba(0,0,0,0.4);
+  border-radius: 6px;
 }
 
 #weather-loc {
   border: none;
-  height: 26px;
+  height: 22px;
+  width: 120px;
   text-align: center;
   color: #D2CBC9;
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
-}
-
-#weather-loc:focus {
-  text-decoration: underline;
 }
 
 .off-Focus {
@@ -68,22 +73,20 @@ input{
   }
 }
 
-#mainwrap-top {
-  width:200px;
-  height:200px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin:-200px 0 0 -100px; 
+#weathericon {
+  width:24px;
+  height:24px;
+  position: fixed;
+  top: 26px;
+  left: 22px;
 }
 
 #weather-show {
-  width:50px;
-  height:50px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin:55px 0 0 90px; 
+  width:100px;
+  height:10px;
+  position: fixed;
+  top: 20px;
+  left: 48px;
 }
 
 /*Todo List*/
@@ -96,6 +99,7 @@ input{
   left: 20px;
   display: none;
   border-radius: 6px;
+  padding-top: 10px;
   opacity: 0;
 }
 
@@ -108,8 +112,6 @@ input{
 }
 
 .new-taskDetail {
-  border: none;
-  border-bottom: 2px inset;
   opacity: 0;
   -webkit-animation: fadeIn .5s linear forwards;
   -moz-animation: fadeIn .5s linear forwards;
@@ -137,11 +139,39 @@ input{
   text-decoration: none;
   color: #D2CBC9;
 }
+
+#addtask-button {
+  position: absolute;
+  bottom:0;
+  left:0;
+}
+
+#completedtask-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.complete-button {
+  position: absolute;
+  left: 0;
+  margin-top: -2px;
+}
+
+.remove-button {
+  position: absolute;
+  right: 0;
+  margin-top: -2px;
+}
+
+.confirm-change-button {
+  margin-left: 30px;
+}
  
 /*News Feed*/
 #newswrap {
   background-color: #fff;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.8);
   border-radius: 6px;
   height: 86vh;
   position: fixed;
@@ -205,6 +235,7 @@ h4 {
   margin-bottom: 10px;
 }
 
+
 /*greetings*/
 #mainwrap-bot {
   width:600px;
@@ -218,6 +249,13 @@ h4 {
 h1 {
   text-align: center;
   font-size: 64px;
+  text-shadow: 0 1px 5px rgba(0,0,0,.1);
+}
+
+h2 {
+  text-align: center;
+  font-size: 32px;
+  text-shadow: 0 1px 5px rgba(0,0,0,.1);
 }
 
 /*Animations*/
