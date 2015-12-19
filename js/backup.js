@@ -5,13 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
     hour = curTime.getHours(),
     greeting = document.getElementById('greeting');
     if (hour <= 7 || hour >= 18) {
-      document.body.style.backgroundImage = 'url(\'photos/night.jpg\')';
+      document.body.style.backgroundImage = "url('photos/night.jpg')";
       greeting.innerHTML = 'Good Evening.';
     } else if (hour < 12) {
-      document.body.style.backgroundImage = 'url(\'photos/morning.jpg\')';
+      document.body.style.backgroundImage = "url('photos/morning.jpg')";
       greeting.innerHTML = 'Good Morning.';
     } else {
-      document.body.style.backgroundImage = 'url(\'photos/afternoon.jpg\')';
+      document.body.style.backgroundImage = "url('photos/afternoon.jpg')";
       greeting.innerHTML = 'Good Afternoon.';
     }
   }
@@ -55,19 +55,16 @@ document.addEventListener('DOMContentLoaded', function() {
         myStr = before + myStr;
         if(after) {
           myStr = myStr +after;
-        }
+        };
         return myStr;
-      };
+      }
     }
 
     function dispWeather(data) {
-      var weather = data.weather[0].main,
-      icon = data.weather[0].icon,
-      weatherIcon = document.getElementById('weather-icon');
-      weatherIcon.src = 'photos/weather/' + icon +'.png';
-      weatherShow.innerHTML = '<h5>' + 
-        Math.round(data.main.temp - 273.15).toString() +
-        '°C ' + weather + '</h5>';
+      var weather = data.weather[0].main;
+      var icon = data.weather[0].icon;
+      document.getElementById('weather-icon').src = 'photos/weather/' + icon +'.png';
+      weatherShow.innerHTML = '<h5>' + Math.round(data.main.temp - 273.15).toString() + '°C ' + weather + '</h5>';
       weatherLocation.value = data.name;
     }
 
@@ -81,8 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function getCurrentLocation () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (pos) {
-          myUrl = 'http://api.openweathermap.org/data/2.5/weather?lat='+
-          pos.coords.latitude+'&lon='+pos.coords.longitude+myAppId;
+          myUrl = 'http://api.openweathermap.org/data/2.5/weather?lat='+pos.coords.latitude+'&lon='+pos.coords.longitude+myAppId;
           getRequest(dispWeather);
         }, function () {
           myUrl = getUrl('San Francisco')(weatherCity,myAppId);
@@ -97,24 +93,24 @@ document.addEventListener('DOMContentLoaded', function() {
     weatherLocation.onclick = function() {
       this.value = '';
       this.setAttribute('class','on-Focus');
-    };
+    }
 
     weatherLocation.onkeyup = function(e) {
       if (!e) e = window.event;
       var keyCode = e.keyCode || e.which;
       // if enter is pressed
-      if (keyCode === '13') {
+      if (keyCode == '13') {
         weatherLocation.blur();
         myUrl = getUrl(getInputLocation())(weatherCity,myAppId);
         return getRequest(dispWeather);
       }
-    };
+    }
 
     weatherLocation.onblur = function() {
       this.setAttribute('class','off-Focus');
       myUrl = getUrl(getInputLocation())(weatherCity,myAppId);
       return getRequest(dispWeather);
-    };
+    }
 
     getCurrentLocation();
   }
@@ -146,24 +142,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function addTask(content,id) {
       var confirmChangeButton, cancelChangeButton,
       curTask = content || userInTask.value,
-      freshTaskLine = document.createElement('div'),
-      taskDetail = document.createElement('div'),
-      taskEle = document.createElement('input');
-
-      function addButton(ele,myEleClas,innerCon,myEvent,myFunc) { 
-        var myButton = document.createElement(ele);
-        myButton.setAttribute('class', myEleClas);
-        myButton.innerHTML = innerCon;
-        myButton.addEventListener(myEvent,myFunc);
-        return myButton;
-      }
-
-      var completeButton = addButton('button','btn-md btn-link complete-button','<i class=\'glyphicon glyphicon-ok-circle\'></i>','click',function () {
+      freshTaskLine = document.createElement('div');
+      completeButton = addButton('button','btn-md btn-link complete-button',"<i class='glyphicon glyphicon-ok-circle'></i>",'click',function () {
         var parent = this.parentNode.parentNode,
         child = this.parentNode,
-        completedTaskDetail = this.parentNode.firstChild.firstChild,
+        completedTaskDetail = this.parentNode.firstChild.firstChild;
         taskId = completedTaskDetail.getAttribute('data-id');
-        document.getElementById('completed-list').innerHTML += '<div>'+completedTaskDetail.value+'</div>';
+        document.getElementById('completed-list').innerHTML += "<div>"+completedTaskDetail.value+"</div>";
         parent.removeChild(child);
         taskCount--;
         completedCount++;
@@ -172,14 +157,14 @@ document.addEventListener('DOMContentLoaded', function() {
           type: 'DELETE',
           url: 'https://chingtasksapp.herokuapp.com/tasks/'+taskId,
           dataType: 'JSON',
-          success: function() {
+          success: function(res) {
           }
         });
       }), 
       delButton = addButton('button','btn-md btn-link remove-button',
-      '<i class=\'glyphicon glyphicon-remove-circle\'></i>','mousedown',function () {
+      "<i class='glyphicon glyphicon-remove-circle'></i>",'mousedown',function () {
         var parent = this.parentNode.parentNode,
-        child = this.parentNode,
+        child = this.parentNode;
         taskId = this.parentNode.firstChild.firstChild.getAttribute('data-id');
         parent.removeChild(child);
         taskCount--;
@@ -188,16 +173,19 @@ document.addEventListener('DOMContentLoaded', function() {
           type: 'DELETE',
           url: 'https://chingtasksapp.herokuapp.com/tasks/'+taskId,
           dataType: 'JSON',
-          success: function() {
+          success: function(res) {
           }
         });
       });
+
+      taskDetail = document.createElement('div'),
+      taskEle = document.createElement('input');
       taskDetail.setAttribute('class','col-xs-10');
       taskEle.setAttribute('class', 'col-xs-12 new-taskDetail');
       taskEle.setAttribute('data-isediton',false);
       if (id !== '') {
         taskEle.setAttribute('data-id',id);
-      }
+      };
       taskEle.value = curTask;
       taskEle.addEventListener('mousedown',function() {
         var isEditOn = this.getAttribute('data-isediton'),
@@ -211,20 +199,20 @@ document.addEventListener('DOMContentLoaded', function() {
             function () {
               var inEle = this.parentNode.parentNode.firstChild.firstChild,
               taskId = inEle.getAttribute('data-id'),
-              data = {'task': {'content': inEle.value}};
+              data = {"task": {"content": inEle.value}};
               inEle.setAttribute('data-originalTask',inEle.value);
               $.ajax({
                 type: 'PATCH',
                 url: 'https://chingtasksapp.herokuapp.com/tasks/'+taskId,
                 data: data,
                 dataType: 'JSON',
-                success: function() {
+                success: function(res) {
                 }
               }); 
           });
           cancelChangeButton = addButton('button','cancel-change-button btn-xs btn-link','cancel','mousedown',
             function() {
-              this.parentNode.parentNode.firstChild.firstChild.value = originalTask;
+              this.parentNode.parentNode.firstChild.firstChild.value = originalTask; 
           });
           this.parentNode.parentNode.lastChild.style.visibility = 'visible';
           this.parentNode.parentNode.appendChild(confirmCancelDiv);
@@ -242,8 +230,16 @@ document.addEventListener('DOMContentLoaded', function() {
           this.parentNode.parentNode.lastChild.style.visibility = 'hidden';
       });
       
-      if (id === '') {
-        var data = {'task': {'content': userInTask.value}};
+      function addButton(ele,myEleClas,innerCon,myEvent,myFunc,myType) { 
+        var myButton = document.createElement(ele);
+        myButton.setAttribute('class', myEleClas);
+        myButton.innerHTML = innerCon;
+        myButton.addEventListener(myEvent,myFunc);
+        return myButton;
+      }
+
+      if (id == '') {
+        var data = {"task": {"content": userInTask.value}};
         console.log(data);
         $.ajax({
           type: 'POST',
@@ -288,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!isAddOn && taskCount < 10) {
         document.getElementById('completed-list').style.display = 'none';
         document.getElementById('todo-list').style.display = 'block';
-        inputTask.style.display = 'block';      
+        inputTask.style.display = "block";      
         userInTask.focus();
         isAddOn = true;
       }
@@ -318,14 +314,14 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!e) e = window.event;
       var keyCode = e.keyCode || e.which;
       // if enter is pressed
-      if (keyCode === 13) {
+      if (keyCode == '13') {
         if (isAddOn && userInTask.value) {
           addTask('','');
           closeInputTask();
           dispTaskNoti();
         }
       }
-    };
+    }
 
     document.getElementById('confirm-button').onclick = function() {
       if (isAddOn && userInTask.value) {
@@ -347,13 +343,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // News api
 
   function getNewsFeed() {
-    var newsBlock = document.getElementById('newswrap'),
+    var newsBlock = document.getElementById('newswrap');
     showNews = false;
     
     function getRequest(dataHandle) {
       var XHR, 
-      myUrl = 'http://api.nytimes.com/svc/topstories/v1/'+
-       'world.json?api-key=b5f1430d9b082e1b2489f5c4036adedd:16:73712885';
+      myUrl = 'http://api.nytimes.com/svc/topstories/v1/world.json?api-key=b5f1430d9b082e1b2489f5c4036adedd:16:73712885';
       function makeRequest(url) {
         XHR = new XMLHttpRequest();
         if (!XHR) {
@@ -367,6 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Waiting for data');
           }
         };
+          ;
         XHR.open('GET',url,true);
         XHR.send();
       }
@@ -379,15 +375,14 @@ document.addEventListener('DOMContentLoaded', function() {
         var news = data.results[num],
         myDiv = document.createElement('div');
         myDiv.setAttribute('class','col-xs-12 news-title-abstract');
-        if (news.multimedia !== '') {
+        if (news['multimedia'] != "") {
           var imgWrap = document.createElement('div'),
           myImg = document.createElement('img');
           imgWrap.setAttribute('class','imgWrap');
           myImg.setAttribute('class','img-responsive');
           myImg.src = news.multimedia[4].url;  
           imgWrap.appendChild(myImg);
-          imgWrap.innerHTML += '<span class=\'img-caption\'>' + 
-            news.multimedia[4].caption + '</span>';
+          imgWrap.innerHTML += "<span class='img-caption'>" + news.multimedia[4].caption + "</span>";
           myDiv.appendChild(imgWrap);
         }
         myDiv.innerHTML += '<h4><a href='+news.url+'>'+news.title+'</a></h4>' +
