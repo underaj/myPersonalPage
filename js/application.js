@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Acquiring the time to set greeting message and background image
   function checkTime() {
     var curTime = new Date();
-    var hr = curTime.hour;
+    var hr = curTime.getHours();
     var greeting = document.getElementById('greeting');
     if (hr <= 7 || hr >= 18) {
       document.body.style.backgroundImage = 'url(\'photos/night.jpg\')';
@@ -28,8 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var myUrl;
     var XHR;
 
-    /**GET weather data request using XMLHttpRequest
-    with Callback function (dataHandle) for when request is successful**/
+    /**
+     * GET weather data request using XMLHttpRequest
+     * with Callback function (dataHandle) for when 
+     * request is successful
+     */
     function getRequest(dataHandle) {
       function makeRequest(url) {
         XHR = new XMLHttpRequest();
@@ -157,9 +160,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    /** addTask function is called either when the previous AJAX
-    get saved tasks  or User adds new task, with saved tasks, 
-    the task description (content) and ID is passed to the function **/
+    /** 
+     * addTask function is called either when the previous AJAX
+     * get saved tasks  or User adds new task, with saved tasks, 
+     * the task description (content) and ID is passed to the function
+     */
     function addTask(content,id) {
       var curTask = content || userInTask.value;
       var freshTaskLine = document.createElement('div');
@@ -211,8 +216,10 @@ document.addEventListener('DOMContentLoaded', function() {
           });
       });
 
-      /**Buttons created with their own specifications and different 
-      callback functions triggered by their eventListener**/
+      /**
+       * Buttons created with their own specifications and different 
+       *callback functions triggered by their eventListener
+       */
       function addButton(ele,myEleClas,innerCon,myEvent,myFunc) { 
         var myButton = document.createElement(ele);
         myButton.setAttribute('class', myEleClas);
@@ -221,8 +228,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return myButton;
       }
 
-      /**Checks whether task is new or retrieved from server, if task was
-      retrieved, sets the id assigned by server to the task element**/
+      /**
+       * Checks whether task is new or retrieved from server, if task was
+       * retrieved, sets the id assigned by server to the task element
+       */
       if (id !== '') {
         taskEle.setAttribute('data-id', id);
       }
@@ -248,8 +257,10 @@ document.addEventListener('DOMContentLoaded', function() {
               var taskId = inEle.getAttribute('data-id');
               var data = {'task': {'content': inEle.value}};
               inEle.setAttribute('data-originalTask',inEle.value);
-              /**Searches the server for same task ID,
-              Patches the task detail if user confirms to change it**/
+              /**
+               * Searches the server for same task ID,
+               * Patches the task detail if user confirms to change it
+               */
               $.ajax({
                 type: 'PATCH',
                 url: 'https://chingtasksapp.herokuapp.com/tasks/'+taskId,
@@ -287,9 +298,11 @@ document.addEventListener('DOMContentLoaded', function() {
           this.parentNode.parentNode.lastChild.style.visibility = 'hidden';
       });
       
-      /**If new task is created, AJAX POST the task detail to server. 
-      When successful, retrieves the ID assigned by server and sets it 
-      to the corresponding task element's data-id attribute.**/
+      /**
+       * If new task is created, AJAX POST the task detail to server. 
+       * When successful, retrieves the ID assigned by server and sets it 
+       * to the corresponding task element's data-id attribute.
+       */
       if (id === '') {
         var data = {'task': {'content': userInTask.value}};
         $.ajax({
@@ -400,8 +413,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var newsBlock = document.getElementById('newswrap');
     var showNews = false;
     
-    /**GET News data request using XMLHttpRequest
-    with Callback function (dataHandle) for when request is successful**/
+    /**
+     * GET News data request using XMLHttpRequest
+     * with Callback function (dataHandle) for 
+     * when request is successful
+     */
     function getRequest(dataHandle) {
       var XHR;
       var myUrl = 'http://api.nytimes.com/svc/topstories/v1/'+
@@ -425,8 +441,10 @@ document.addEventListener('DOMContentLoaded', function() {
       return makeRequest(myUrl);
     }
 
-    /** Callback function to handle data retrieved from NYTimes API.
-    showing each news' image, title and abstract in the news tab.**/
+    /** 
+     * Callback function to handle data retrieved from NYTimes API.
+     * showing each news' image, title and abstract in the news tab.
+     */
     getRequest(function(data) {
       function addToFeed(num) {
         var news = data.results[num];
