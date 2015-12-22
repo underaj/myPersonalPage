@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     }
 
-    //If weatherLoc input is empty, sets location to  San Francisco
+    // If weatherLoc input is empty, sets location to  San Francisco
     function getInputLocation() {
       if (weatherLocation.value === '') {
         weatherLocation.value = 'San Francisco';
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       /**
        * Buttons created with their own specifications and different 
-       *callback functions triggered by their eventListener
+       * callback functions triggered by their eventListener
        */
       function addButton(ele,myEleClas,innerCon,myEvent,myFunc) { 
         var myButton = document.createElement(ele);
@@ -240,8 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
       taskEle.setAttribute('class', 'col-xs-12 new-taskDetail');
       taskEle.setAttribute('data-isediton',false);
       taskEle.value = curTask;
-      /**When task element is clicked, user can alter the task, which
-      the user can confirm or cancel the change**/
+      /**
+       * When task element is clicked, user can alter the task, which
+       * the user can confirm or cancel the change
+       */
       taskEle.addEventListener('mousedown',function() {
         var isEditOn = this.getAttribute('data-isediton');
         var confirmCancelDiv = document.createElement('div');
